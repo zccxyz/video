@@ -104,10 +104,6 @@
                 if (this.loading){
                     return;
                 }
-                if (this.name.length == 0){
-                    this.success("请输入视频名称");
-                    return
-                }
                 this.getData(1)
             },
             change: function (num) {
@@ -145,7 +141,6 @@
                 localStorage.setItem("video_url", data['VideoUrl']);
                 localStorage.setItem("video_name", data['VideoName']);
                 window.open("look/", "_blank");
-                console.log(data)
             },
             copy: function () {
                 var url = $(this).prev(); //根据实际情况更改,需要复制内容的载体
