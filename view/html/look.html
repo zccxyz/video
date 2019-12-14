@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>搜你所想</title>
+</head>
+<link rel="stylesheet" href="/static/css/index.css">
+<link rel="stylesheet" href="/static/css/video.css">
+<style>
+    .main {
+        text-align: center; /*让div内部文字居中*/
+        background-color: #fff;
+        border-radius: 20px;
+        width: 50%;
+        height: 50%;
+        margin: auto;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+</style>
+<body style="background-image: url('/static/imgs/bg.jpg')">
+<div id="app">
+    <template>
+        <video v-if="url"
+                id="my-player"
+                class="video-js main"
+                controls
+                preload="auto"
+                data-setup='{}'>
+            <source :src="url" type="video/mp4"></source>
+            <p class="vjs-no-js">
+                To view this video please enable JavaScript, and consider upgrading to a
+                web browser that
+                <a href="https://videojs.com/html5-video-support/" target="_blank">
+                    supports HTML5 video
+                </a>
+            </p>
+        </video>
+        <h1 v-else>播放地址错误</h1>
+    </template>
+</div>
+</body>
+</html>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/index.js"></script>
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/video.js"></script>
+<script>
+    new Vue({
+        el: "#app",
+        data: {
+            name: "",
+            url: ""
+        },
+        methods: {
+            err: function (msg) {
+                this.$notify({
+                    title: '出错了~',
+                    message: msg,
+                });
+            },
+            success: function (msg) {
+                this.$notify({
+                    title: '提示~',
+                    message: msg,
+                });
+            },
+        },
+        mounted: function () {
+            var url = localStorage.getItem("video_url");
+            if(url == "" || url == "null") {
+                return
+            }
+            this.url = url
+        }
+    })
+</script>

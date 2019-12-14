@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>搜你所想</title>
+</head>
+<link rel="stylesheet" href="/static/css/index.css">
+<style>
+    .el-table__header-wrapper{
+        margin-top: 100px;
+    }
+</style>
+<body style="width: 80%;margin-left: 15px">
+<div id="app">
+    <template>
+        <div @click="openGithub()" style="position: fixed;right: 30px;top: 15px;font-size: 15px;z-index: 99; text-align: right;cursor: pointer">
+            <img src="/static/imgs/github.png" width="50px"/>
+            <div style="font-size: 13px; margin-top: 15px">觉得还行就给个Star吧!</div>
+        </div>
+        <div style="margin-top: 15px;width: 50%; position: fixed; top: 15px; left: 15px;z-index: 999999">
+            <el-input placeholder="搜索想看的视频名称..." v-model="name" class="input-with-select">
+                <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+            </el-input>
+        </div>
+        <div style="position: fixed;right: 30px;bottom: 15px;font-size: 15px;z-index: 99; text-align: right">
+            <p>AUTHOR  &nbsp; 一人平天下</p>
+            <span style="font-size: 10px">本站所有资源来自互联网，如果无意中侵犯了您的权利，请与我们联系</span>
+        </div>
+        <el-table style="margin-bottom: 100px"
+              v-loading="loading"
+              element-loading-text="正在拼命获取数据..."
+              :data="list"
+              style="width: 100%">
+        <el-table-column
+                prop="Size"
+                label="大小"
+                width="180">
+        </el-table-column>
+        <el-table-column
+                prop="VideoName"
+                label="文件名"
+                width="180">
+        </el-table-column>
+        <el-table-column
+                prop="Belong"
+                label="分类">
+        </el-table-column>
+        <el-table-column
+                prop="Uploader"
+                label="上传者">
+        </el-table-column>
+        <el-table-column
+                prop="UploadDate"
+                label="上传日期">
+        </el-table-column>
+        <el-table-column
+                prop="address"
+                label="操作">
+            <template slot-scope="scope">
+                <div v-if="scope.row.VideoUrl">
+                    <el-button @click="look(scope.row)" type="text" size="small">在线看</el-button>
+                    <el-button type="text" size="small" :data-clipboard-text="scope.row.VideoUrl" class="copy">复制下载地址
+                    </el-button>
+                </div>
+                <div v-else>
+                    地址解析失败
+                </div>
+            </template>
+        </el-table-column>
+    </el-table>
+
+        <div style="margin-top: 30px; position: fixed; bottom: 0">
+            <el-pagination
+                    @current-change="change"
+                    background
+                    :disabled="disabled"
+                    layout="prev, pager, next"
+                    :total="total">
+            </el-pagination>
+        </div>
+    </template>
+</div>
+</body>
+</html>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/index.js"></script>
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/clipboard.js"></script>
+<script>
+    vm = new Vue({
+        el: "#app",
+        data: {
+            name: "庆余年",
+            list: [],
+            loading: true,
+            disabled: false,
+            total: 0,
+        },
+        methods: {
+            openGithub: function() {
+                window.open("", "_blank");
+            },
+            search: function(word) {
+                if (this.loading){
+                    return;
+                }
+                if (this.name.length == 0){
+                    this.success("请输入视频名称");
+                    return
+                }
+                this.getData(1)
+            },
+            change: function (num) {
+                this.getData(num)
+            },
+            getData: function (page=1) {
+                this.loading = true;
+                this.disabled = true;
+                var that = this;
+                $.get("/search?p="+page+"&word="+this.name, function (rs) {
+                    if (rs['Code'] != 0) {
+                        that.err(rs["Msg"]);
+                        return
+                    }
+                    that.list = rs['Data']['list'];
+                    that.total = rs['Data']['total'];
+                    console.log(rs['Data']['total'])
+                    that.loading = false;
+                    that.disabled = false;
+                })
+            },
+            err: function (msg) {
+                this.$notify({
+                    title: '出错了~',
+                    message: msg,
+                });
+            },
+            success: function (msg) {
+                this.$notify({
+                    title: '提示~',
+                    message: msg,
+                });
+            },
+            look: function (data) {
+                localStorage.setItem("video_url", data['VideoUrl']);
+                window.open("look/", "_blank");
+                console.log(data)
+            },
+            copy: function () {
+                var url = $(this).prev(); //根据实际情况更改,需要复制内容的载体
+                url.select();
+                document.execCommand("Copy");
+                alert("已复制至剪切板");
+            }
+        },
+        mounted: function () {
+            this.getData()
+        }
+    });
+
+    var clipboard = new ClipboardJS('.copy');
+    //成功回调
+    clipboard.on('success', function (e) {
+        e.clearSelection();
+        vm.success("复制成功~")
+    });
+    //失败回调
+    clipboard.on('error', function (e) {
+        vm.err("复制失败~")
+    });
+</script>
