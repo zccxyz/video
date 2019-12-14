@@ -7,12 +7,12 @@
 <link rel="stylesheet" href="/static/css/index.css">
 <link rel="stylesheet" href="/static/css/video.css">
 <style>
-    .main {
+    #my-player {
         text-align: center; /*让div内部文字居中*/
-        background-color: #fff;
         border-radius: 20px;
+        background-color: transparent;
         width: 50%;
-        height: 50%;
+        height: 55%;
         margin: auto;
         position: absolute;
         top: 0;
@@ -25,19 +25,12 @@
 <div id="app">
     <template>
         <video v-if="url"
-                id="my-player"
-                class="video-js main"
-                controls
-                preload="auto"
-                data-setup='{}'>
+               id="my-player"
+               class="video-js"
+               controls
+               preload="auto"
+               data-setup='{}'>
             <source :src="url" type="video/mp4"></source>
-            <p class="vjs-no-js">
-                To view this video please enable JavaScript, and consider upgrading to a
-                web browser that
-                <a href="https://videojs.com/html5-video-support/" target="_blank">
-                    supports HTML5 video
-                </a>
-            </p>
         </video>
         <h1 v-else>播放地址错误</h1>
     </template>
@@ -71,10 +64,13 @@
         },
         mounted: function () {
             var url = localStorage.getItem("video_url");
-            if(url == "" || url == "null") {
+            var name = localStorage.getItem("video_name");
+            if (url == "" || url == "null") {
                 return
             }
             this.url = url
+            document.title = name;
+            this.name = name
         }
     })
 </script>

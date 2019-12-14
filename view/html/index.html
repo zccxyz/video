@@ -143,6 +143,7 @@
             },
             look: function (data) {
                 localStorage.setItem("video_url", data['VideoUrl']);
+                localStorage.setItem("video_name", data['VideoName']);
                 window.open("look/", "_blank");
                 console.log(data)
             },
