@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"reptile/web"
+	"time"
 )
 
 func main() {
@@ -10,5 +11,9 @@ func main() {
 
 	web.Routes(app)
 
-	_ = app.Run(":3000")
+	err := app.Run(":3000")
+	if err != nil {
+		web.Echo("启动出错: " + err.Error())
+		time.Sleep(time.Minute)
+	}
 }

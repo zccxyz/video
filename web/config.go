@@ -5,6 +5,7 @@ import (
 	"github.com/robertkrimen/otto"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"regexp"
 )
 
@@ -105,4 +106,8 @@ type Msg struct {
 	Code int
 	Msg  string
 	Data interface{}
+}
+
+func Echo(str string) {
+	_, _ = os.Stdout.WriteString(str + "\n")
 }
