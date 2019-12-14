@@ -15,5 +15,7 @@ func main() {
 	if err != nil {
 		web.Echo("启动出错: " + err.Error())
 		time.Sleep(time.Minute)
+		return
 	}
+	web.Echo("请访问 http://localhost:3000")
 }
