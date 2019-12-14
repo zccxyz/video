@@ -69,15 +69,13 @@
         </el-table-column>
     </el-table>
 
-        <div style="margin-top: 30px; position: fixed; bottom: 0">
-            <el-pagination
-                    @current-change="change"
-                    background
-                    :disabled="disabled"
-                    layout="prev, pager, next"
-                    :total="total">
-            </el-pagination>
-        </div>
+        <el-pagination style="margin-top: 30px; position: fixed; bottom: 0"
+                       @current-change="change"
+                       background
+                       :disabled="disabled"
+                       layout="prev, pager, next"
+                       :page-count="total">
+        </el-pagination>
     </template>
 </div>
 </body>
@@ -113,6 +111,7 @@
                 this.loading = true;
                 this.disabled = true;
                 var that = this;
+                this.total = 0;
                 $.get("/search?p="+page+"&word="+this.name, function (rs) {
                     if (rs['Code'] != 0) {
                         that.err(rs["Msg"]);
@@ -120,7 +119,6 @@
                     }
                     that.list = rs['Data']['list'];
                     that.total = rs['Data']['total'];
-                    console.log(rs['Data']['total'])
                     that.loading = false;
                     that.disabled = false;
                 })

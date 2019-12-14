@@ -11,7 +11,7 @@ func main() {
 
 	web.Routes(app)
 
-	err := app.Run(":3000")
+	err := app.Run(":80")
 	if err != nil {
 		web.Echo("启动出错: " + err.Error())
 		time.Sleep(time.Minute)
