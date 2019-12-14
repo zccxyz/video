@@ -12,7 +12,7 @@ import (
 const (
 	Ua        string = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36"
 	Host      string = "http://g.shumafen.cn/"
-	Cookie    string = "PHPSESSID=c1jrt2hfr1hbqu824418l173cq; user_key=b945871b50a7d6db2e6550a3bf2513971e364cf5; username=xyz404; userpass=zcc199651"
+	Cookie    string = "请去牛x云获取cookie"
 	FirstHost string = "https://g.shumafen.cn/api/file/84c4e8797fe8d1e8/"
 )
 
